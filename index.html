@@ -1,160 +1,184 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Call Request</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider/distribute/nouislider.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider/distribute/nouislider.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f8f9fa;
-        }
-        .container {
-            width: 360px;
-            background: #fff;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            text-align: center;
-        }
-        .container img {
-            width: 200px;
-            margin-bottom: 20px;
-        }
-        .container p {
-            color: #777;
-            font-size: 14px;
-            margin-bottom: 20px;
-        }
-        .form-group {
-            margin-bottom: 20px;
-            position: relative;
-        }
-        .form-group label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-        .form-group input {
-            width: calc(100% - 20px);
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        .form-group .fa-calendar-alt {
-            position: absolute;
-            top: 35px;
-            right: 15px;
-            color: #007bff;
-            pointer-events: none;
-        }
-        .btn {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            background: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            text-transform: uppercase;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .btn:hover {
-            background: #0056b3;
-        }
-        #time-slider {
-            margin: 20px 0;
-        }
-        .time-values {
-            display: flex;
-            justify-content: space-between;
-            font-weight: bold;
-        }
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #f8f9fa;
+      }
+      .container {
+        width: 360px;
+        background: #fff;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        text-align: center;
+      }
+      .container img {
+        width: 200px;
+        margin-bottom: 20px;
+      }
+      .container p {
+        color: #777;
+        font-size: 14px;
+        margin-bottom: 20px;
+      }
+      .form-group {
+        margin-bottom: 40px;
+        position: relative;
+        color: #707070;
+      }
+      .form-group label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+      .form-group input {
+        width: calc(100% - 40px);
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+      .form-group .fa-calendar-alt {
+        position: absolute;
+        top: 35px;
+        right: 15px;
+        color: #707070;
+        pointer-events: none;
+      }
+      #call-date:focus-visible {
+        outline: none;
+      }
+      .btn {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        margin-top: 70px;
+        background: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        text-transform: uppercase;
+        font-weight: bold;
+        cursor: pointer;
+      }
+      .btn:hover {
+        background: #0056b3;
+      }
+      #time-slider {
+        margin: 20px 0;
+      }
+      .time-values {
+        display: flex;
+        justify-content: space-between;
+        font-weight: bold;
+        color: #707070;
+      }
+      .noUi-connect {
+        background: #007bff !important;
+      }
+      .noUi-handle {
+        background: #707070 !important;
+        border: none !important;
+        width: 20px !important;
+        height: 20px !important;
+        top: -2px !important;
+      }
+      .noUi-handle::before {
+        left: 12px !important;
+        top: 3px !important;
+      }
+      .noUi-handle::after {
+        left: 9px !important;
+        top: 3px !important;
+      }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/nouislider/distribute/nouislider.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/nouislider/distribute/nouislider.min.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var today = new Date().toISOString().split('T')[0];
-
-            flatpickr("#call-date", {
-                minDate: "today",
-                dateFormat: "Y-m-d",
-                disable: [
-                    function(date) {
-                        // return true to disable
-                        return (date.getDay() === 6 || date.getDay() === 0); // Disable weekends
-                    }
-                ]
-            });
-
-            var timeSlider = document.getElementById('time-slider');
-
-            noUiSlider.create(timeSlider, {
-                start: [600, 1140], // Starting at 10:00 and 19:00
-                connect: true,
-                range: {
-                    'min': 600, // 10:00
-                    'max': 1140 // 19:00
-                },
-                step: 15,
-                tooltips: [true, true],
-                format: {
-                    to: function (value) {
-                        var hours = Math.floor(value / 60);
-                        var minutes = Math.floor(value % 60);
-                        if (hours < 10) hours = '0' + hours;
-                        if (minutes < 10) minutes = '0' + minutes;
-                        return hours + ':' + minutes;
-                    },
-                    from: function (value) {
-                        return value;
-                    }
-                }
-            });
-
-            var startTimeValue = document.getElementById('start-time-value');
-            var endTimeValue = document.getElementById('end-time-value');
-
-            timeSlider.noUiSlider.on('update', function (values, handle) {
-                if (handle === 0) {
-                    startTimeValue.innerHTML = values[handle];
-                } else {
-                    endTimeValue.innerHTML = values[handle];
-                }
-            });
+      document.addEventListener("DOMContentLoaded", function () {
+        // Initialize Flatpickr datepicker
+        flatpickr("#call-date", {
+          dateFormat: "Y-m-d",
+          minDate: "today",
+          firstDayOfWeek: 1, // Start the week on Monday
+          disable: [
+            function (date) {
+              // Disable weekends
+              return date.getDay() === 0 || date.getDay() === 6;
+            },
+          ],
         });
 
-        function submitRequest() {
-            var callDate = document.getElementById('call-date').value;
-            var startTime = document.getElementById('start-time-value').innerText;
-            var endTime = document.getElementById('end-time-value').innerText;
+        // Initialize noUiSlider
+        var timeSlider = document.getElementById("time-slider");
 
-            if (!callDate || !startTime || !endTime) {
-                alert('Please fill out all fields.');
-                return;
-            }
+        noUiSlider.create(timeSlider, {
+          start: [600, 1140], // Starting at 10:00 and 19:00
+          connect: true,
+          range: {
+            min: 600, // 10:00
+            max: 1140, // 19:00
+          },
+          step: 60,
+          format: {
+            to: function (value) {
+              var hours = Math.floor(value / 60);
+              var minutes = Math.floor(value % 60);
+              if (hours < 10) hours = "0" + hours;
+              if (minutes < 10) minutes = "0" + minutes;
+              return hours + ":" + minutes;
+            },
+            from: function (value) {
+              return value;
+            },
+          },
+        });
 
-            var requestData = {
-                callDate: callDate,
-                startTime: startTime,
-                endTime: endTime
-            };
+        var startTimeValue = document.getElementById("start-time-value");
+        var endTimeValue = document.getElementById("end-time-value");
 
-            console.log('Request Data:', requestData);
-            // Here you can send the requestData to the server using fetch or any other method
-            // Example using fetch:
-            /*
+        timeSlider.noUiSlider.on("update", function (values, handle) {
+          if (handle === 0) {
+            startTimeValue.innerHTML = values[handle];
+          } else {
+            endTimeValue.innerHTML = values[handle];
+          }
+        });
+      });
+
+      function submitRequest() {
+        var callDate = document.getElementById("call-date").value;
+        var startTime = document.getElementById("start-time-value").innerText;
+        var endTime = document.getElementById("end-time-value").innerText;
+
+        if (!callDate || !startTime || !endTime) {
+          alert("Please fill out all fields.");
+          return;
+        }
+
+        var requestData = {
+          callDate: callDate,
+          startTime: startTime,
+          endTime: endTime,
+        };
+
+        console.log("Request Data:", requestData);
+        // Here you can send the requestData to the server using fetch or any other method
+        // Example using fetch:
+        /*
             fetch('your-api-endpoint', {
                 method: 'POST',
                 headers: {
@@ -170,30 +194,29 @@
                 console.error('Error:', error);
             });
             */
-        }
+      }
     </script>
-</head>
-<body>
-
-<div class="container">
-    <img src="logo.png" alt="Otet Markets">
-    <h2>Otet Markets</h2>
-    <p>Otet Group LTD</p>
-    <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using ‘Content here,</p>
-    <div class="form-group">
+  </head>
+  <body>
+    <div class="container">
+      <img src="logo.png" alt="Otet Markets" />
+      <h2>Otet Markets</h2>
+      <p>Otet Group LTD</p>
+      <p>
+        It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of
+        using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using ‘Content here,
+      </p>
+      <div class="form-group">
         <label for="call-date">Call Date</label>
-        <input type="date" id="call-date" name="call-date">
+        <input type="text" id="call-date" name="call-date" />
         <i class="fas fa-calendar-alt"></i>
-    </div>
-    <div class="form-group">
+      </div>
+      <div class="form-group">
         <label for="time-range">Select Time Range</label>
         <div id="time-slider"></div>
-        <div class="time-values">
-            <span id="start-time-value">10:00</span> - <span id="end-time-value">19:00</span>
-        </div>
+        <div class="time-values"><span id="start-time-value">10:00</span> <span id="end-time-value">19:00</span></div>
+      </div>
+      <button class="btn" onclick="submitRequest()">Call Request</button>
     </div>
-    <button class="btn" onclick="submitRequest()">Call Request</button>
-</div>
-
-</body>
+  </body>
 </html>
